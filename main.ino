@@ -25,7 +25,17 @@ int FANS=10;
 int ZAMPA=11;
 int FLASH=13;
 
+#include <LiquidCrystal_I2C.h>
+
+
+//                    addr, en,rw,rs,d4,d5,d6,d7,bl,blpol
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Set the LCD I2C address
+
+
 void setup() {
+  
+
+  
   Serial.begin(9600);  // Used to type in characters
   dht.begin();
   comedero.attach(12);
@@ -34,6 +44,36 @@ void setup() {
   pinMode(FANS, OUTPUT);
   pinMode(ZAMPA, OUTPUT);
   pinMode(FLASH, OUTPUT);
+
+
+
+lcd.begin(20,4);         // initialize the lcd for 20 chars 4 lines, turn on backlight
+
+
+  for(int i = 0; i< 3; i++)
+  {
+    lcd.backlight();
+    delay(250);
+    lcd.noBacklight();
+    delay(250);
+  }
+  lcd.backlight(); // finish with backlight on
+
+//-------- Write characters on the display ------------------
+
+  lcd.setCursor(0,0);
+  lcd.print("Hola, perrito!");
+  delay(1000);
+  lcd.setCursor(0,1);
+  lcd.print("Esto es una prueba");
+  delay(1000);
+  lcd.setCursor(0,2);
+  lcd.print("de la pantallita");
+  lcd.setCursor(0,3);
+  delay(2000);
+  lcd.print("Yupi?");
+  delay(8000);
+  lcd.clear();
 
   digitalWrite(FLASH, LOW);
 }
