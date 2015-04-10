@@ -9,6 +9,10 @@ const long hours = 3.6e6;
 const long minutes = 60000;
 const long seconds = 1000;
 
+const int minTemp = 19;
+const int maxTemp = 23;
+const int HUM = 62;
+
 const long COMEDERO = 12*hours;
 const long VENTILACION = 3*hours;
 long apagarVentilacion = 0; 
@@ -16,26 +20,34 @@ long lastComedero = 0;
 long lastVentilacion = VENTILACION;
 Servo comedero;
 
+int CALORET=9;
+int FANS=10;
+int ZAMPA=11;
+int FLASH=13;
+
 void setup() {
   Serial.begin(9600);  // Used to type in characters
   dht.begin();
   comedero.attach(12);
   
-  pinMode(10, OUTPUT);
-  pinMode(11, OUTPUT);
-  pinMode(13, OUTPUT);
+  pinMode(CALORET, OUTPUT);
+  pinMode(FANS, OUTPUT);
+  pinMode(ZAMPA, OUTPUT);
+  pinMode(FLASH, OUTPUT);
 
-  digitalWrite(13, LOW);
+  digitalWrite(FLASH, LOW);
 }
 
 void loop()
 {
   
+  
+  
   int botonComedero = analogRead(A0);
   if (botonComedero > 800)
   {
     lastComedero = millis();
-    digitalWrite(11, HIGH);
+    digitalWrite(ZAMPA, HIGH);
     for (int i=95; i > 30;i-=15) {
       comedero.write(i);
       delay(5);
@@ -45,14 +57,14 @@ void loop()
       delay(5);
     }
     delay(100);
-    digitalWrite(11, LOW);
+    digitalWrite(ZAMPA, LOW);
   }
          
 
   if (millis() - lastComedero > COMEDERO)
   {
     lastComedero = millis();
-    digitalWrite(11, HIGH);
+    digitalWrite(ZAMPA, HIGH);
     for (int i=95; i > 30;i-=15) {
       comedero.write(i);
       delay(5);
@@ -62,24 +74,40 @@ void loop()
       delay(5);
     }
     delay(100);
-    digitalWrite(11, LOW);
+    digitalWrite(ZAMPA, LOW);
   }
   
   if (millis() - lastVentilacion > VENTILACION)
   {
     lastVentilacion=millis();
-    digitalWrite(10, HIGH);
+    digitalWrite(FANS, HIGH);
     apagarVentilacion = millis() + 3*minutes;
   }
   
-  if (millis() > apagarVentilacion)
+ /* if (millis() > apagarVentilacion)
   {
-    digitalWrite(10, LOW);
-  }
+    digitalWrite(FANS, LOW);
+  }*/
   
   Serial.print(dht.readHumidity());
   Serial.print("   ");
 //  delay(30);
   Serial.println(dht.readTemperature());
+ 
+     if (dht.readHumidity() > HUM + 2) {
+  digitalWrite(FANS, HIGH);
+  }
+ 
+      if (dht.readHumidity() < HUM ) {
+  digitalWrite(FANS, LOW);
+  }
+  
+    if (dht.readTemperature() < minTemp) {
+  digitalWrite(CALORET, HIGH);
+  }
+    if (dht.readTemperature() > maxTemp) {
+  digitalWrite(CALORET, LOW);
+  }
+  
 //  delay(2000);
 }
