@@ -18,7 +18,12 @@ const long VENTILACION = 3*hours;
 long apagarVentilacion = 0; 
 long lastComedero = 0;
 long lastVentilacion = VENTILACION;
+const long refrescoPantalla = 1*seconds;
+long lastRefrescoPantalla = 0;
+
 Servo comedero;
+
+int botonComedero= 0;
 
 int CALORET=9;
 int FANS=10;
@@ -39,6 +44,8 @@ void setup() {
   Serial.begin(9600);  // Used to type in characters
   dht.begin();
   comedero.attach(12);
+  
+  pinMode(botonComedero, INPUT);
   
   pinMode(CALORET, OUTPUT);
   pinMode(FANS, OUTPUT);
@@ -74,6 +81,9 @@ lcd.begin(20,4);         // initialize the lcd for 20 chars 4 lines, turn on bac
   lcd.print("Yupi?");
   delay(8000);
   lcd.clear();
+  
+  lcd.noBacklight();
+
 
   digitalWrite(FLASH, LOW);
 }
@@ -129,10 +139,10 @@ void loop()
     digitalWrite(FANS, LOW);
   }*/
   
-  Serial.print(dht.readHumidity());
-  Serial.print("   ");
+//  Serial.print(dht.readHumidity());
+//  Serial.print("   ");
 //  delay(30);
-  Serial.println(dht.readTemperature());
+//  Serial.println(dht.readTemperature());
  
      if (dht.readHumidity() > HUM + 2) {
   digitalWrite(FANS, HIGH);
@@ -147,6 +157,26 @@ void loop()
   }
     if (dht.readTemperature() > maxTemp) {
   digitalWrite(CALORET, LOW);
+  }
+ 
+  if (millis() - lastRefrescoPantalla > refrescoPantalla)
+  {
+  lastRefrescoPantalla = millis();  
+  lcd.clear();  
+  lcd.setCursor(0,0);
+  lcd.print("Temperatura:");
+  delay(1);
+  lcd.setCursor(0,1);
+  lcd.print(dht.readTemperature());
+  delay(1);
+  lcd.setCursor(0,2);
+  lcd.print("Humedad:");
+  lcd.setCursor(9,2);
+  lcd.print(modo[indice]);
+  lcd.setCursor(0,3);
+  delay(1);
+  lcd.print(dht.readHumidity());
+  delay(1);
   }
   
 //  delay(2000);
