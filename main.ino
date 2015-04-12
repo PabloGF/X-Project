@@ -19,11 +19,14 @@ long apagarVentilacion = 0;
 long lastComedero = 0;
 long lastVentilacion = VENTILACION;
 const long refrescoPantalla = 1*seconds;
+const long refrescoBotonera = 120;
 long lastRefrescoPantalla = 0;
+long lastRefrescoBotonera = 0;
 
 Servo comedero;
 
 int botonComedero= 0;
+int botonera = 0;
 
 int CALORET=9;
 int FANS=10;
@@ -46,6 +49,7 @@ void setup() {
   comedero.attach(12);
   
   pinMode(botonComedero, INPUT);
+  pinMode(botonera, INPUT);
   
   pinMode(CALORET, OUTPUT);
   pinMode(FANS, OUTPUT);
@@ -162,6 +166,7 @@ void loop()
   if (millis() - lastRefrescoPantalla > refrescoPantalla)
   {
   lastRefrescoPantalla = millis();  
+  lcd.backlight();
   lcd.clear();  
   lcd.setCursor(0,0);
   lcd.print("Temperatura:");
@@ -172,12 +177,105 @@ void loop()
   lcd.setCursor(0,2);
   lcd.print("Humedad:");
   lcd.setCursor(9,2);
-  lcd.print(modo[indice]);
+//  lcd.print(modo[indice]);
+  lcd.print("modo");
   lcd.setCursor(0,3);
   delay(1);
   lcd.print(dht.readHumidity());
   delay(1);
+  
   }
   
+  
+  
+   if (millis() - lastRefrescoBotonera > refrescoBotonera) 
+   {
+     lastRefrescoBotonera = millis();
+     
+      botonera = analogRead(A1);
+      delay(1);
+      //Serial.println(botonera);
+      
+      if (botonera > 200 && botonera < 300)
+        {Serial.println("UP");  
+         //lastRefrescoBotonera = lastRefrescoBotonera + 120;
+         delay(200);
+           
+        }
+      
+      if (botonera > 450 && botonera < 600)
+      {Serial.println("DOWN");
+        delay(200);
+      //lastRefrescoBotonera = lastRefrescoBotonera + 120;
+      }
+      
+      
+      if (botonera > 700 && botonera < 900)
+      {Serial.println("ENTER");
+        delay(200);
+        //lastRefrescoBotonera = lastRefrescoBotonera + 120;
+      }
+      
+   }
+  
 //  delay(2000);
+
+/*
+  float HUM = dht.getHumidity();
+  if (HUM > maxHUM) {
+  digitalWrite(FAN, HIGH);
+  }
+  if (HUM < minHUM) {
+  digitalWrite(FAN, LOW);
+  }
+
+  botonPulsado = digitalRead(botonUP);
+
+    if (botonPulsado == HIGH) {
+      lcd.clear();
+      maxHUM = maxHUM + 2;
+      minHUM = minHUM +3;
+       if (minHUM > 56){
+	minHUM = 49;
+	maxHUM = 61;
+       }
+    indice++;
+    if (indice > 2){indice = 0;}
+    delay(150);
+
+     if (minHUM < 50){
+     lcd.setCursor(0,0);
+     lcd.print("cambio de modo a");
+     lcd.setCursor(0,1);
+     lcd.print("DESIERTO DE MONGOLIA");
+     lcd.setCursor(10,2);
+     lcd.print("(61,49)");
+     lcd.setCursor(0,4);
+     lcd.print("(desierto)");
+     }
+     if (minHUM > 53){
+     lcd.setCursor(0,0);
+     lcd.print("cambio de modo a");
+     lcd.setCursor(0,1);
+     lcd.print("NORMAL");
+     lcd.setCursor(10,2);
+     lcd.print("(65,55)");
+     lcd.setCursor(0,4);
+     lcd.print("(normal)");
+     }
+     if (minHUM < 53 && minHUM > 50){
+     lcd.setCursor(0,0);
+     lcd.print("cambio de modo a");
+     lcd.setCursor(0,1);
+     lcd.print("SECO");
+     lcd.setCursor(10,2);
+     lcd.print("(63,52)");
+     lcd.setCursor(0,4);
+     lcd.print("(seco)");
+     }
+
+    delay(6000);
+    lcd.clear();
+    */
+    
 }
