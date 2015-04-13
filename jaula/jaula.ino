@@ -37,7 +37,7 @@ long lastVentilacion = 0;
 
 
 const long refrescoPantalla = 1*seconds;
-const long refrescoBotonera = 200;
+const long refrescoBotonera = 180;
 long lastRefrescoPantalla = 0;
 long lastRefrescoBotonera = 0;
 
@@ -45,6 +45,9 @@ Servo comedero;
 
 int botonComedero= 0;
 int botonera = 0;
+int BP = 0;
+int LBP = 0;
+long KPA = 0;
 
 bool ventilando = false;
 long descansando = -999999;
@@ -172,88 +175,57 @@ void loop()
   
   
   
-   if (millis() - lastRefrescoBotonera > refrescoBotonera) 
-   {
+   //if (millis() - lastRefrescoBotonera > refrescoBotonera) 
+ /*  {
      lastRefrescoBotonera = millis();
      
       botonera = analogRead(A1);
-      delay(1);
+  */  //  delay(1);
       //Serial.println(botonera);
+      
+      
+         if (millis()-180 > KPA)
+        {
+        LBP=0;
+        botonera = analogRead(A1);  }
       
       if (botonera > 200 && botonera < 300)
       {
-        Serial.println("UP");  
+        BP=1;
+        
+          if (BP != LBP)
+          {
+          LBP=BP;
+          KPA=millis();        
+          Serial.println("UP");  
+          }
       }
       
       if (botonera > 450 && botonera < 600)
       {
-        Serial.println("DOWN");
+                BP=2;
+        
+          if (BP != LBP)
+          {
+          LBP=BP;
+          KPA=millis();        
+          Serial.println("DOWN");  
+          }
       }
       
       if (botonera > 700 && botonera < 900)
       {
-        Serial.println("ENTER");
+                BP=3;
+        
+          if (BP != LBP)
+          {
+          LBP=BP;
+          KPA=millis()+30;        
+          Serial.println("ENTER");  
+          }
       }
-   }
-  
-//  delay(2000);
+   //}
+   
 
-/*
-  float HUM = dht.getHumidity();
-  if (HUM > maxHUM) {
-  digitalWrite(FAN, HIGH);
-  }
-  if (HUM < minHUM) {
-  digitalWrite(FAN, LOW);
-  }
-
-  botonPulsado = digitalRead(botonUP);
-
-    if (botonPulsado == HIGH) {
-      lcd.clear();
-      maxHUM = maxHUM + 2;
-      minHUM = minHUM +3;
-       if (minHUM > 56){
-	minHUM = 49;
-	maxHUM = 61;
-       }
-    indice++;
-    if (indice > 2){indice = 0;}
-    delay(150);
-
-     if (minHUM < 50){
-     lcd.setCursor(0,0);
-     lcd.print("cambio de modo a");
-     lcd.setCursor(0,1);
-     lcd.print("DESIERTO DE MONGOLIA");
-     lcd.setCursor(10,2);
-     lcd.print("(61,49)");
-     lcd.setCursor(0,4);
-     lcd.print("(desierto)");
-     }
-     if (minHUM > 53){
-     lcd.setCursor(0,0);
-     lcd.print("cambio de modo a");
-     lcd.setCursor(0,1);
-     lcd.print("NORMAL");
-     lcd.setCursor(10,2);
-     lcd.print("(65,55)");
-     lcd.setCursor(0,4);
-     lcd.print("(normal)");
-     }
-     if (minHUM < 53 && minHUM > 50){
-     lcd.setCursor(0,0);
-     lcd.print("cambio de modo a");
-     lcd.setCursor(0,1);
-     lcd.print("SECO");
-     lcd.setCursor(10,2);
-     lcd.print("(63,52)");
-     lcd.setCursor(0,4);
-     lcd.print("(seco)");
-     }
-
-    delay(6000);
-    lcd.clear();
-    */
     
 }
