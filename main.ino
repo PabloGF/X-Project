@@ -23,10 +23,18 @@ const long refrescoBotonera = 120;
 long lastRefrescoPantalla = 0;
 long lastRefrescoBotonera = 0;
 
+char lastButtonPressed;
+char buttonPressed;
+
+long keyPadAct = 0;
+
 Servo comedero;
 
 int botonComedero= 0;
 int botonera = 0;
+
+lastButtonPressed = "ZERO";
+buttonPressed = "ZERO";
 
 int CALORET=9;
 int FANS=10;
@@ -197,26 +205,58 @@ void loop()
       //Serial.println(botonera);
       
       if (botonera > 200 && botonera < 300)
-        {Serial.println("UP");  
+       //  // {Serial.println("UP");  
          //lastRefrescoBotonera = lastRefrescoBotonera + 120;
-         delay(200);
-           
+         
+         buttonPressed = 'UP';
+            if (buttonPressed != lastButtonPressed)
+               {
+               lastButtonPressed = buttonPressed;
+               
+               Serial.println(buttonPressed);
+               
+               keyPadAct = millis();
+               
+               }
         }
       
       if (botonera > 450 && botonera < 600)
-      {Serial.println("DOWN");
-        delay(200);
+      {//Serial.println("DOWN");
+       // delay(200);
       //lastRefrescoBotonera = lastRefrescoBotonera + 120;
+      
+               buttonPressed = 'DOWN';
+            if (buttonPressed != lastButtonPressed)
+               {
+               lastButtonPressed = buttonPressed;
+               
+               Serial.println(buttonPressed);
+               
+               keyPadAct = millis();
+               }
+    
       }
       
       
       if (botonera > 700 && botonera < 900)
-      {Serial.println("ENTER");
-        delay(200);
+      {//Serial.println("ENTER");
+        //delay(200);
         //lastRefrescoBotonera = lastRefrescoBotonera + 120;
+               buttonPressed = 'ENTER';
+            if (buttonPressed != lastButtonPressed)
+               {
+               lastButtonPressed = buttonPressed;
+               
+               Serial.println(buttonPressed);
+               
+               keyPadAct = millis();
+               }
+    
       }
       
    }
+   
+}
   
 //  delay(2000);
 
@@ -278,4 +318,4 @@ void loop()
     lcd.clear();
     */
     
-}
+
