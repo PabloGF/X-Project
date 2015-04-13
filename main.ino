@@ -23,8 +23,8 @@ const long refrescoBotonera = 120;
 long lastRefrescoPantalla = 0;
 long lastRefrescoBotonera = 0;
 
-char lastButtonPressed;
-char buttonPressed;
+char lastButtonPressed[15];
+char buttonPressed[15];
 
 long keyPadAct = 0;
 
@@ -253,6 +253,12 @@ void loop()
                }
     
       }
+      
+      
+      
+      if (millis()-50 > keyPadAct)
+      
+      {lastButtonPressed = 'ZERO';}
       
    }
    
