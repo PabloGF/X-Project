@@ -2,6 +2,7 @@
 #include "DHT.h"
 #include <Servo.h> 
 #include <LiquidCrystal_I2C.h>
+#include "pitches.h"
  
 #define DHTPIN 8
 #define FEEDBUTTON A0
@@ -79,9 +80,22 @@ void showMainMenu(int index)
     lcd.setCursor(0,1);
     lcd.print(index==1?cursor:"" + "Hum");
     lcd.setCursor(0,2);
-    lcd.print(index==0?cursor:"" + "Comida");
+    lcd.print(index==0?cursor:"" + "TEST");
     lcd.setCursor(0,3);
-    lcd.print(index==0?cursor:"" + "Back");
+    lcd.print(index==0?cursor:"" + "CONFIG");
+}
+
+void showTestMenu(int index)
+{
+    String cursor = "=>";
+    lcd.setCursor(0,0);
+    lcd.print(index==0?cursor:"" + "Test general");
+    lcd.setCursor(0,1);
+    lcd.print(index==1?cursor:"" + "Calefaccion");
+    lcd.setCursor(0,2);
+    lcd.print(index==0?cursor:"" + "");
+    lcd.setCursor(0,3);
+    lcd.print(index==0?cursor:"" + "CONFIG");
 }
 
 void showTempMenu(int index)
@@ -97,7 +111,31 @@ void showTempMenu(int index)
     lcd.print(index==0?cursor:"" + "Back");
 }
 
+void showHumMenu(int index)
+{
+    String cursor = "=>";
+    lcd.setCursor(0,0);
+    lcd.print(index==0?cursor:"" + "Max Hum");
+    lcd.setCursor(0,1);
+    lcd.print(index==1?cursor:"" + "Min Hum");
+    lcd.setCursor(0,2);
+    lcd.print(index==0?cursor:"" + "Nocturno/Diurno");
+    lcd.setCursor(0,3);
+    lcd.print(index==0?cursor:"" + "Back");
+}
 
+void showComidaMenu(int index)
+{
+    String cursor = "=>";
+    lcd.setCursor(0,0);
+    lcd.print(index==0?cursor:"" + "N de comidas/dia");
+    lcd.setCursor(0,1);
+    lcd.print(index==1?cursor:"" + "Cantidad comida");
+    lcd.setCursor(0,2);
+    lcd.print(index==0?cursor:"" + "Twitter ON/OFF");
+    lcd.setCursor(0,3);
+    lcd.print(index==0?cursor:"" + "Back");
+}
 
 void setup() {
   Serial.begin(9600);  // Used to type in characters
