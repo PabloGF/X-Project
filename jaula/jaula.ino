@@ -69,6 +69,35 @@ void feed(){
   digitalWrite(FEED, LOW);
 }
 
+int menuIndex = -1;
+
+void showMainMenu(int index)
+{
+    String cursor = "=>";
+    lcd.setCursor(0,0);
+    lcd.print(index==0?cursor:"" + "Temp");
+    lcd.setCursor(0,1);
+    lcd.print(index==1?cursor:"" + "Hum");
+    lcd.setCursor(0,2);
+    lcd.print(index==0?cursor:"" + "Comida");
+    lcd.setCursor(0,3);
+    lcd.print(index==0?cursor:"" + "Back");
+}
+
+void showTempMenu(int index)
+{
+    String cursor = "=>";
+    lcd.setCursor(0,0);
+    lcd.print(index==0?cursor:"" + "Max temp");
+    lcd.setCursor(0,1);
+    lcd.print(index==1?cursor:"" + "Min temp");
+    lcd.setCursor(0,2);
+    lcd.print(index==0?cursor:"" + "Nocturno/Diurno");
+    lcd.setCursor(0,3);
+    lcd.print(index==0?cursor:"" + "Back");
+}
+
+
 
 void setup() {
   Serial.begin(9600);  // Used to type in characters
@@ -97,6 +126,7 @@ void setup() {
   digitalWrite(FLASH, LOW);
   digitalWrite(FEED, LOW);
   digitalWrite(FAN, LOW);
+  
 }
 
 
@@ -136,13 +166,6 @@ void loop()
       digitalWrite(FAN, LOW);
     }
   }
- 
-  
-//  Serial.print(dht.readHumidity());
-//  Serial.print("   ");
-//  delay(30);
-//  Serial.println(dht.readTemperature())
-
   
   if (dht.readTemperature() < minTemp) {
     digitalWrite(HEATER, HIGH);
@@ -197,7 +220,9 @@ void loop()
           {
           LBP=BP;
           KPA=millis();        
-          Serial.println("UP");  
+          Serial.println("UP");
+          menuIndex = menuIndex<1?0:menuIndex-1;
+          showMainMenu(menuIndex);
           }
       }
       
