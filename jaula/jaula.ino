@@ -75,7 +75,8 @@ int menuIndex = -1;
 void showMainMenu(int index)
 {    
     lcd.backlight(); 
-    String cursor = "=>";
+    char cursor[] = "=>";
+    char n[] = "";
     lcd.setCursor(0,0);
     lcd.print("Temp: ");
     lcd.setCursor(7,0);
@@ -84,63 +85,67 @@ void showMainMenu(int index)
     lcd.print("Hum: ");
     lcd.setCursor(7,1);
     lcd.print(dht.readHumidity());
-    lcd.print(index==1?cursor:"" + "Hum");
+    lcd.print(strcat(index==0?cursor:n, "Hum"));
     lcd.setCursor(0,2);
-    lcd.print(index==0?cursor:"" + "TEST");
+    lcd.print(strcat(index==0?cursor:n, "TEST"));
     lcd.setCursor(0,3);
-    lcd.print(index==0?cursor:"" + "CONFIG");
+    lcd.print(strcat(index==0?cursor:n, "CONFIG"));
 }
 
 void showTestMenu(int index)
 {
-    String cursor = "=>";
+    char cursor[] = "=>";
+    char n[] = "";
     lcd.setCursor(0,0);
-    lcd.print(index==0?cursor:"" + "Test general");
+    lcd.print(strcat(index==0?cursor:n, "Test general"));
     lcd.setCursor(0,1);
-    lcd.print(index==1?cursor:"" + "Calefaccion");
+    lcd.print(strcat(index==0?cursor:n, "Calefaccion"));
     lcd.setCursor(0,2);
-    lcd.print(index==0?cursor:"" + "");
+    lcd.print(strcat(index==0?cursor:n, ""));
     lcd.setCursor(0,3);
-    lcd.print(index==0?cursor:"" + "CONFIG");
+    lcd.print(strcat(index==0?cursor:n, "CONFIG"));
 }
 
 void showTempMenu(int index)
 {
-    String cursor = "=>";
+    char cursor[] = "=>";
+    char n[] = "";
     lcd.setCursor(0,0);
-    lcd.print(index==0?cursor:"" + "Max temp");
+    lcd.print(strcat(index==0?cursor:n, "Max temp"));
     lcd.setCursor(0,1);
-    lcd.print(index==1?cursor:"" + "Min temp");
+    lcd.print(strcat(index==0?cursor:n, "Min temp"));
     lcd.setCursor(0,2);
-    lcd.print(index==0?cursor:"" + "Nocturno/Diurno");
+    lcd.print(strcat(index==0?cursor:n, "Nocturno/Diurno"));
     lcd.setCursor(0,3);
-    lcd.print(index==0?cursor:"" + "Back");
+    lcd.print(strcat(index==0?cursor:n, "Back"));
 }
 
 void showHumMenu(int index)
 {
-    String cursor = "=>";
+    char cursor[] = "=>";
+    char n[] = "";
     lcd.setCursor(0,0);
-    lcd.print(index==0?cursor:"" + "Max Hum");
+    lcd.print(strcat(index==0?cursor:n, "Max Hum"));
     lcd.setCursor(0,1);
-    lcd.print(index==1?cursor:"" + "Min Hum");
+    lcd.print(strcat(index==0?cursor:n, "Min Hum"));
     lcd.setCursor(0,2);
-    lcd.print(index==0?cursor:"" + "Nocturno/Diurno");
+    lcd.print(strcat(index==0?cursor:n, "Nocturno/Diurno"));
     lcd.setCursor(0,3);
-    lcd.print(index==0?cursor:"" + "Back");
+    lcd.print(strcat(index==0?cursor:n, "Back"));
 }
 
 void showComidaMenu(int index)
 {
-    String cursor = "=>";
+    char cursor[] = "=>";
+    char n[] = "";
     lcd.setCursor(0,0);
-    lcd.print(index==0?cursor:"" + "N de comidas/dia");
+    lcd.print(strcat(index==0?cursor:n, "N de comidas/dia"));
     lcd.setCursor(0,1);
-    lcd.print(index==1?cursor:"" + "Cantidad comida");
+    lcd.print(strcat(index==0?cursor:n, "Cantidad comida"));
     lcd.setCursor(0,2);
-    lcd.print(index==0?cursor:"" + "Twitter ON/OFF");
+    lcd.print(strcat(index==0?cursor:n, "Twitter ON/OFF"));
     lcd.setCursor(0,3);
-    lcd.print(index==0?cursor:"" + "Back");
+    lcd.print(strcat(index==0?cursor:n, "Back"));
 }
 
 void setup() {
@@ -239,62 +244,51 @@ void loop()
     lcd.print(dht.readHumidity());
     delay(1);
   }
-  
-  
-  
-   //if (millis() - lastRefrescoBotonera > refrescoBotonera) 
- /*  {
-     lastRefrescoBotonera = millis();
-     
-      botonera = analogRead(A1);
-  */  //  delay(1);
-      //Serial.println(botonera);
+  if (millis()-180 > KPA)
+  {
+    LBP=0;
+    botonera = analogRead(A1);
+  }
       
-      
-         if (millis()-180 > KPA)
-        {
-        LBP=0;
-        botonera = analogRead(A1);  }
-      
-      if (botonera > 200 && botonera < 300)
-      {
-        BP=1;
-        
-          if (BP != LBP)
-          {
-          LBP=BP;
-          KPA=millis();        
-          Serial.println("UP");
-          menuIndex = menuIndex<1?0:menuIndex-1;
-          showMainMenu(menuIndex);
-          }
-      }
-      
-      if (botonera > 450 && botonera < 600)
-      {
-                BP=2;
-        
-          if (BP != LBP)
-          {
-          LBP=BP;
-          KPA=millis();        
-          Serial.println("DOWN");  
-          }
-      }
-      
-      if (botonera > 700 && botonera < 900)
-      {
-                BP=3;
-        
-          if (BP != LBP)
-          {
-          LBP=BP;
-          KPA=millis()+30;        
-          Serial.println("ENTER");  
-          }
-      }
-   //}
-   
+  if (botonera > 200 && botonera < 300)
+  {
+    BP=1;
 
+    if (BP != LBP)
+    {
+      LBP=BP;
+      KPA=millis();        
+      Serial.println("UP");
+      menuIndex = menuIndex<1?0:menuIndex-1;
+      showMainMenu(menuIndex);
+    }
+  }
+      
+  if (botonera > 450 && botonera < 600)
+  {
+    BP=2;
+
+    if (BP != LBP)
+    {
+      LBP=BP;
+      KPA=millis();        
+      Serial.println("DOWN"); 
+      menuIndex = menuIndex<1?0:menuIndex+1;
+      showMainMenu(menuIndex);
+    }
+  }
     
+  if (botonera > 700 && botonera < 900)
+  {
+    BP=3;
+
+    if (BP != LBP)
+    {
+      LBP=BP;
+      KPA=millis()+30;        
+      Serial.println("ENTER");
+      menuIndex = 0;
+      showTempMenu(menuIndex);
+    }
+  }
 }
