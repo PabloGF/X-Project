@@ -11,6 +11,15 @@
 #define FEED 11
 #define FLASH 13
 
+//-----------------------------
+int melody[] = {
+  NOTE_A7,0, NOTE_A7,0,NOTE_A7,0,NOTE_A7,0,NOTE_A7,0,NOTE_A7,0,NOTE_A7,0};
+
+// note durations: 4 = quarter note, 8 = eighth note, etc.:
+int noteDurations[] = {
+   4, 2, 4, 2, 4, 8, 4, 8, 4, 8, 4, 8, 2, 4 };
+//-----------------------------
+
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 const long hours = 3.6e6;
@@ -68,6 +77,45 @@ void feed(){
   }
   delay(100);
   digitalWrite(FEED, LOW);
+}
+
+
+void communication () {
+  if (Serial.available()) { //Si está disponible
+    char c = Serial.read(); //Guardamos la lectura en una variable char
+    if (c == 'H') { //Si es una 'H', enciendo el LED
+      
+        for (int thisNote = 0; thisNote < 14; thisNote++) {
+
+    // to calculate the note duration, take one second 
+    // divided by the note type.
+    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    int noteDuration = 1000/noteDurations[thisNote];
+    tone(7, melody[thisNote],noteDuration);
+
+    // to distinguish the notes, set a minimum time between them.
+    // the note's duration + 30% seems to work well:
+    int pauseBetweenNotes = noteDuration * 1.30;
+    delay(pauseBetweenNotes);
+    // stop the tone playing:
+    noTone(7);
+    
+  }
+      digitalWrite(FLASH, HIGH);
+    } 
+    if (c == 'L') { //Si es una 'L', apago el LED
+      digitalWrite(FLASH, LOW);
+    }
+    if (c == 'W') { //Si es una 'W', enciendo calefaccion y piloto indicativo
+      digitalWrite(HEATER, HIGH);
+    }
+    if (c == 'S') { //Si es una 'S', apago la calefaccion
+      digitalWrite(HEATER, LOW);
+    }
+        if (c == 'F') { 
+      feed();
+  }
+}
 }
 
 int menuIndex = -1;
