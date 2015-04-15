@@ -3,7 +3,8 @@
 #include <Servo.h> 
 #include <LiquidCrystal_I2C.h>
 #include "pitches.h"
- 
+
+#define BUZZER 6 
 #define DHTPIN 8
 #define FEEDBUTTON A0
 #define HEATER 9
@@ -91,14 +92,14 @@ void communication () {
     // divided by the note type.
     //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
     int noteDuration = 1000/noteDurations[thisNote];
-    tone(7, melody[thisNote],noteDuration);
+    tone(6, melody[thisNote],noteDuration);
 
     // to distinguish the notes, set a minimum time between them.
     // the note's duration + 30% seems to work well:
     int pauseBetweenNotes = noteDuration * 1.30;
     delay(pauseBetweenNotes);
     // stop the tone playing:
-    noTone(7);
+    noTone(6);
     
   }
       digitalWrite(FLASH, HIGH);
@@ -112,7 +113,7 @@ void communication () {
     if (c == 'S') { //Si es una 'S', apago la calefaccion
       digitalWrite(HEATER, LOW);
     }
-        if (c == 'F') { 
+    if (c == 'F') { 
       feed();
   }
 }
