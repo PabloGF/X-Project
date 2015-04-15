@@ -85,7 +85,6 @@ void showMainMenu(int index)
     lcd.print("Hum: ");
     lcd.setCursor(7,1);
     lcd.print(dht.readHumidity());
-    lcd.print(strcat(index==0?cursor:n, "Hum"));
     lcd.setCursor(0,2);
     lcd.print(strcat(index==0?cursor:n, "TEST"));
     lcd.setCursor(0,3);
