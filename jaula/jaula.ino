@@ -71,9 +71,31 @@ void feed(){
 }
 
 int menuIndex = -1;
+void (*menuFuction)(int, bool);
 
-void showMainMenu(int index)
-{    
+void showMainMenu(int index, bool enter)
+{
+    if (enter) 
+    {
+      switch (index)
+      { 
+        case 0:
+          //menuFuction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          break;
+        case 1:
+          //menuFuction = &showTemp;
+          break;
+        case 2:
+          //menuFuction = &showTemp;
+          break;
+        case 3:
+          //menuFuction = &showTemp;
+          break;
+      }
+      (*menuFuction)(index, false);
+      return;
+    }
+    
     lcd.backlight(); 
     char cursor[] = "=>";
     char n[] = "";
@@ -85,67 +107,129 @@ void showMainMenu(int index)
     lcd.print("Hum: ");
     lcd.setCursor(7,1);
     lcd.print(dht.readHumidity());
-    lcd.print(strcat(index==0?cursor:n, "Hum"));
     lcd.setCursor(0,2);
     lcd.print(strcat(index==0?cursor:n, "TEST"));
     lcd.setCursor(0,3);
-    lcd.print(strcat(index==0?cursor:n, "CONFIG"));
+    lcd.print(strcat(index==1?cursor:n, "CONFIG"));
 }
 
-void showTestMenu(int index)
+void showTestMenu(int index, bool enter)
 {
+    if (enter) 
+    {
+      switch (index)
+      { 
+        case 0:
+          //menuFuction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          break;
+        case 1:
+          //menuFuction = &showTemp;
+          break;
+        case 2:
+          //menuFuction = &showTemp;
+          break;
+        case 3:
+          //menuFuction = &showTemp;
+          break;
+      }
+      (*menuFuction)(index, false);
+      return;
+    }
+    
     char cursor[] = "=>";
     char n[] = "";
     lcd.setCursor(0,0);
     lcd.print(strcat(index==0?cursor:n, "Test general"));
     lcd.setCursor(0,1);
-    lcd.print(strcat(index==0?cursor:n, "Calefaccion"));
+    lcd.print(strcat(index==1?cursor:n, "Calefaccion"));
     lcd.setCursor(0,2);
-    lcd.print(strcat(index==0?cursor:n, ""));
+    lcd.print(strcat(index==2?cursor:n, ""));
     lcd.setCursor(0,3);
-    lcd.print(strcat(index==0?cursor:n, "CONFIG"));
+    lcd.print(strcat(index==3?cursor:n, "CONFIG"));
 }
 
-void showTempMenu(int index)
+void showTempMenu(int index, bool enter)
 {
     char cursor[] = "=>";
     char n[] = "";
     lcd.setCursor(0,0);
     lcd.print(strcat(index==0?cursor:n, "Max temp"));
     lcd.setCursor(0,1);
-    lcd.print(strcat(index==0?cursor:n, "Min temp"));
+    lcd.print(strcat(index==1?cursor:n, "Min temp"));
     lcd.setCursor(0,2);
-    lcd.print(strcat(index==0?cursor:n, "Nocturno/Diurno"));
+    lcd.print(strcat(index==2?cursor:n, "Nocturno/Diurno"));
     lcd.setCursor(0,3);
-    lcd.print(strcat(index==0?cursor:n, "Back"));
+    lcd.print(strcat(index==3?cursor:n, "Back"));
 }
 
-void showHumMenu(int index)
+void showHumMenu(int index, bool enter)
 {
+    if (enter) 
+    {
+      switch (index)
+      { 
+        case 0:
+          //menuFuction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          break;
+        case 1:
+          //menuFuction = &showTemp;
+          break;
+        case 2:
+          //menuFuction = &showTemp;
+          break;
+        case 3:
+          //menuFuction = &showTemp;
+          break;
+      }
+      (*menuFuction)(index, false);
+      return;
+    }
+    
     char cursor[] = "=>";
     char n[] = "";
     lcd.setCursor(0,0);
     lcd.print(strcat(index==0?cursor:n, "Max Hum"));
     lcd.setCursor(0,1);
-    lcd.print(strcat(index==0?cursor:n, "Min Hum"));
+    lcd.print(strcat(index==1?cursor:n, "Min Hum"));
     lcd.setCursor(0,2);
-    lcd.print(strcat(index==0?cursor:n, "Nocturno/Diurno"));
+    lcd.print(strcat(index==2?cursor:n, "Nocturno/Diurno"));
     lcd.setCursor(0,3);
-    lcd.print(strcat(index==0?cursor:n, "Back"));
+    lcd.print(strcat(index==3?cursor:n, "Back"));
 }
 
-void showComidaMenu(int index)
+void showComidaMenu(int index, bool enter)
 {
+    if (enter) 
+    {
+      switch (index)
+      { 
+        case 0:
+          //menuFuction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          break;
+        case 1:
+          //menuFuction = &showTemp;
+          break;
+        case 2:
+          //menuFuction = &showTemp;
+          break;
+        case 3:
+          //menuFuction = &showTemp;
+          break;
+      }
+      (*menuFuction)(index, false);
+      return;
+    }
+    
     char cursor[] = "=>";
     char n[] = "";
     lcd.setCursor(0,0);
     lcd.print(strcat(index==0?cursor:n, "N de comidas/dia"));
     lcd.setCursor(0,1);
-    lcd.print(strcat(index==0?cursor:n, "Cantidad comida"));
+    lcd.print(strcat(index==1?cursor:n, "Cantidad comida"));
     lcd.setCursor(0,2);
-    lcd.print(strcat(index==0?cursor:n, "Twitter ON/OFF"));
+    lcd.print(strcat(index==2?cursor:n, "Twitter ON/OFF"));
     lcd.setCursor(0,3);
-    lcd.print(strcat(index==0?cursor:n, "Back"));
+    lcd.print(strcat(index==3?cursor:n, "Back"));
 }
 
 void setup() {
@@ -176,6 +260,7 @@ void setup() {
   digitalWrite(FEED, LOW);
   digitalWrite(FAN, LOW);
   
+  menuFuction = &showMainMenu; // el primer menu es mainMenu
 }
 
 
@@ -260,7 +345,7 @@ void loop()
       KPA=millis();        
       Serial.println("UP");
       menuIndex = menuIndex<1?0:menuIndex-1;
-      showMainMenu(menuIndex);
+      (*menuFuction)(menuIndex, false);
     }
   }
       
@@ -274,7 +359,7 @@ void loop()
       KPA=millis();        
       Serial.println("DOWN"); 
       menuIndex = menuIndex<1?0:menuIndex+1;
-      showMainMenu(menuIndex);
+      (*menuFuction)(menuIndex, false);
     }
   }
     
@@ -288,7 +373,7 @@ void loop()
       KPA=millis()+30;        
       Serial.println("ENTER");
       menuIndex = 0;
-      showTempMenu(menuIndex);
+      (*menuFuction)(menuIndex, true);
     }
   }
 }
