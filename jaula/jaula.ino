@@ -73,11 +73,17 @@ void feed(){
 int menuIndex = -1;
 
 void showMainMenu(int index)
-{
+{    
+    lcd.backlight(); 
     String cursor = "=>";
     lcd.setCursor(0,0);
-    lcd.print(index==0?cursor:"" + "Temp");
+    lcd.print("Temp: ");
+    lcd.setCursor(7,0);
+    lcd.print(dht.readTemperature());
     lcd.setCursor(0,1);
+    lcd.print("Hum: ");
+    lcd.setCursor(7,1);
+    lcd.print(dht.readHumidity());
     lcd.print(index==1?cursor:"" + "Hum");
     lcd.setCursor(0,2);
     lcd.print(index==0?cursor:"" + "TEST");
