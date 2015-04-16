@@ -420,8 +420,15 @@ void loop()
   if (dht.readTemperature() > maxTemp) {
     digitalWrite(HEATER, LOW);
   }
+
+if (analogRead(A1) > 200 && analogRead(A1) < 300)
+  {
+	Serial.println("test");
+	delay(500);
+}
+
  
-  if (millis() - lastRefrescoPantalla > refrescoPantalla)
+  /*if (millis() - lastRefrescoPantalla > refrescoPantalla)
   {
     lastRefrescoPantalla = millis();  
     //lcd.noBacklight();
@@ -476,5 +483,5 @@ void loop()
       menuIndex = 0;
       (*menuFunction)(menuIndex, true);
     }
-  }
+  }*/
 }
