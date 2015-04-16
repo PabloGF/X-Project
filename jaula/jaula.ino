@@ -4,7 +4,7 @@
 #include <LiquidCrystal_I2C.h>
 #include "pitches.h"
 
-#define BUZZER 6 
+#define BUZZER 7
 #define DHTPIN 8
 #define FEEDBUTTON A0
 #define HEATER 9
@@ -92,14 +92,14 @@ void communication() {
     // divided by the note type.
     //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
     int noteDuration = 1000/noteDurations[thisNote];
-    tone(6, melody[thisNote],noteDuration);
+    tone(7, melody[thisNote],noteDuration);
 
     // to distinguish the notes, set a minimum time between them.
     // the note's duration + 30% seems to work well:
     int pauseBetweenNotes = noteDuration * 1.30;
     delay(pauseBetweenNotes);
     // stop the tone playing:
-    noTone(6);
+    noTone(7);
     
   }
       digitalWrite(FLASH, HIGH);
@@ -425,7 +425,7 @@ void loop()
     digitalWrite(HEATER, HIGH);
   }
   if (dht.readTemperature() > maxTemp) {
-    //digitalWrite(HEATER, LOW);
+    digitalWrite(HEATER, LOW);
   }
 
 	if (digitalRead(5) == LOW)
@@ -451,6 +451,7 @@ void loop()
 		Serial.println("ENTER");
 		lastRefrescoPantalla = millis(); 
 		(*menuFunction)(menuIndex, true);
+		menuIndex = 0;
 		delay(180);
 	}
  
