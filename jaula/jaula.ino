@@ -145,17 +145,24 @@ void showMainMenu(int index, bool enter)
     char n[] = "";
     lcd.clear();
     lcd.setCursor(0,0);
+delay(10);
     lcd.print("Temp: ");
     lcd.setCursor(7,0);
+delay(10);
     lcd.print(dht.readTemperature());
     lcd.setCursor(0,1);
     lcd.print("Hum: ");
+delay(10);
     lcd.setCursor(7,1);
+    delay(10);
     lcd.print(dht.readHumidity());
+delay(10);
     lcd.setCursor(0,2);
     lcd.print(strcat(index==0?cursor:n, "TEST"));
+delay(10);
     lcd.setCursor(0,3);
     lcd.print(strcat(index==1?cursor:n, "CONFIG"));
+delay(10);
 }
 
 void showTest(int index, bool enter)
@@ -338,9 +345,6 @@ void setup() {
   digitalWrite(HEATER, HIGH);
   comedero.write(95);
   
-  pinMode(FEEDBUTTON, INPUT);
-  pinMode(botonera, INPUT);
-  
   pinMode(HEATER, OUTPUT);
   pinMode(FAN, OUTPUT);
   pinMode(FEED, OUTPUT);
@@ -373,7 +377,7 @@ void loop()
 {         
 
   // comedero
-  botonComedero = analogRead(feedInterval);
+  botonComedero = 0; //analogRead(feedInterval);
   if (millis() - lastComedero > feedInterval || botonComedero > 800)
   {
     lastComedero = millis();
