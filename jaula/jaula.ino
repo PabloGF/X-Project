@@ -127,6 +127,7 @@ void showMainMenu(int index, bool enter)
     index %= 2;
     if (enter) 
     {
+      enter = false;
       switch (index)
       { 
         case 0:
@@ -144,13 +145,16 @@ void showMainMenu(int index, bool enter)
     char cursor[] = "=>";
     char n[] = "";
     lcd.clear();
+delay(10);
     lcd.setCursor(0,0);
 delay(10);
     lcd.print("Temp: ");
+delay(10);
     lcd.setCursor(7,0);
 delay(10);
     lcd.print(dht.readTemperature());
-    lcd.setCursor(0,1);
+delay(10);
+    lcd.setCursor(0,1);delay(10);
     lcd.print("Hum: ");
 delay(10);
     lcd.setCursor(7,1);
@@ -158,9 +162,11 @@ delay(10);
     lcd.print(dht.readHumidity());
 delay(10);
     lcd.setCursor(0,2);
+delay(10);
     lcd.print(strcat(index==0?cursor:n, "TEST"));
 delay(10);
     lcd.setCursor(0,3);
+delay(10);
     lcd.print(strcat(index==1?cursor:n, "CONFIG"));
 delay(10);
 }
@@ -339,10 +345,10 @@ void showConfigMenu(int index, bool enter)
 }
 
 void setup() {
-  Serial.begin(9600);  // Used to type in characters
+  Serial.begin(9600);
   dht.begin();
   comedero.attach(12);
-  digitalWrite(HEATER, HIGH);
+  digitalWrite(FEED, HIGH);
   comedero.write(95);
   
   pinMode(HEATER, OUTPUT);
@@ -419,7 +425,7 @@ void loop()
   {
     lastRefrescoPantalla = millis();  
     //lcd.noBacklight();
-    //(*menuFunction)(menuIndex, false);
+    (*menuFunction)(menuIndex, false);
   }
   if (millis()-180 > KPA)
   {
@@ -437,7 +443,7 @@ void loop()
       KPA=millis();        
       Serial.println("UP");
       lastRefrescoPantalla = millis(); 
-      menuIndex = menuIndex<1?0:menuIndex-1;
+      //menuIndex = menuIndex<1?0:menuIndex-1;
       (*menuFunction)(menuIndex, false);
     }
   }
