@@ -120,7 +120,7 @@ void communication () {
 }
 
 int menuIndex = 0;
-void (*menuFuction)(int, bool);
+void (*menuFunction)(int, bool);
 
 void showMainMenu(int index, bool enter)
 {
@@ -130,13 +130,13 @@ void showMainMenu(int index, bool enter)
       switch (index)
       { 
         case 0:
-          menuFuction = &showTest; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          menuFunction = &showTest; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
           break;
         case 1:
-          menuFuction = &showConfigMenu;
+          menuFunction = &showConfigMenu;
           break;
       }
-      (*menuFuction)(index, false);
+      (*menuFunction)(index, false);
       return;
     }
     
@@ -179,7 +179,7 @@ void showTest(int index, bool enter)
     delay(500);
     digitalWrite(HEATER, LOW);
     digitalWrite(FAN, LOW);
-    menuFuction = &showMainMenu;
+    menuFunction = &showMainMenu;
     showMainMenu(index, enter);
 }
 
@@ -190,19 +190,19 @@ void showTempMenu(int index, bool enter)
       switch (index)
       { 
         case 0:
-          //menuFuction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          //menuFunction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
           break;
         case 1:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
         case 2:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
         case 3:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
       }
-      (*menuFuction)(index, false);
+      (*menuFunction)(index, false);
       return;
     }
     
@@ -227,19 +227,19 @@ void showHumMenu(int index, bool enter)
       switch (index)
       { 
         case 0:
-          //menuFuction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          //menuFunction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
           break;
         case 1:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
         case 2:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
         case 3:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
       }
-      (*menuFuction)(index, false);
+      (*menuFunction)(index, false);
       return;
     }
     
@@ -264,19 +264,19 @@ void showComidaMenu(int index, bool enter)
       switch (index)
       { 
         case 0:
-          //menuFuction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          //menuFunction = &showTemp; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
           break;
         case 1:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
         case 2:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
         case 3:
-          //menuFuction = &showTemp;
+          //menuFunction = &showTemp;
           break;
       }
-      (*menuFuction)(index, false);
+      (*menuFunction)(index, false);
       return;
     }
     
@@ -301,19 +301,19 @@ void showConfigMenu(int index, bool enter)
       switch (index)
       { 
         case 0:
-          menuFuction = &showTempMenu;
+          menuFunction = &showTempMenu;
           break;
         case 1:
-          menuFuction = &showHumMenu;
+          menuFunction = &showHumMenu;
           break;
         case 2:
-          menuFuction = &showComidaMenu;
+          menuFunction = &showComidaMenu;
           break;
         case 3:
-          menuFuction = &showMainMenu;
+          menuFunction = &showMainMenu;
           break;
       }
-      (*menuFuction)(index, false);
+      (*menuFunction)(index, false);
       return;
     }
     
@@ -362,7 +362,7 @@ void setup() {
   digitalWrite(FAN, LOW);
   digitalWrite(HEATER, LOW);
   
-  menuFuction = &showMainMenu; // el primer menu es mainMenu
+  menuFunction = &showMainMenu; // el primer menu es mainMenu
 }
 
 
@@ -378,6 +378,7 @@ void loop()
   {
     lastComedero = millis();
     feed();
+    delay(180);
   }
   
   // ventiladores
@@ -413,8 +414,8 @@ void loop()
   if (millis() - lastRefrescoPantalla > refrescoPantalla)
   {
     lastRefrescoPantalla = millis();  
-    lcd.noBacklight();
-    //(*menuFuction)(menuIndex, false);
+    //lcd.noBacklight();
+    //(*menuFunction)(menuIndex, false);
   }
   if (millis()-180 > KPA)
   {
@@ -433,7 +434,7 @@ void loop()
       Serial.println("UP");
       lastRefrescoPantalla = millis(); 
       menuIndex = menuIndex<1?0:menuIndex-1;
-      (*menuFuction)(menuIndex, false);
+      (*menuFunction)(menuIndex, false);
     }
   }
       
@@ -448,7 +449,7 @@ void loop()
       Serial.println("DOWN"); 
       lastRefrescoPantalla = millis(); 
       menuIndex = menuIndex>3?0:menuIndex+1;
-      (*menuFuction)(menuIndex, false);
+      (*menuFunction)(menuIndex, false);
     }
   }
     
@@ -463,7 +464,7 @@ void loop()
       Serial.println("ENTER");
       lastRefrescoPantalla = millis(); 
       menuIndex = 0;
-      (*menuFuction)(menuIndex, true);
+      (*menuFunction)(menuIndex, true);
     }
   }
 }
