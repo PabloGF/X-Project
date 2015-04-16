@@ -118,6 +118,8 @@ void communication () {
   }
 }
 }
+void showMainMenu(int, bool);
+void showConfigMenu(int, bool);
 
 int menuIndex = 0;
 void (*menuFunction)(int, bool);
@@ -128,16 +130,18 @@ void showMainMenu(int index, bool enter)
     if (enter) 
     {
       enter = false;
+      Serial.println(index);
       switch (index)
       { 
         case 0:
-          menuFunction = &showTest; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
+          menuFunction = &showTest;
+          showTest(0, false);
           break;
         case 1:
           menuFunction = &showConfigMenu;
+          showConfigMenu(0,false);
           break;
       }
-      (*menuFunction)(index, false);
       return;
     }
     
@@ -145,30 +149,22 @@ void showMainMenu(int index, bool enter)
     char cursor[] = "=>";
     char n[] = "";
     lcd.clear();
-delay(10);
     lcd.setCursor(0,0);
-delay(10);
     lcd.print("Temp: ");
-delay(10);
     lcd.setCursor(7,0);
-delay(10);
     lcd.print(dht.readTemperature());
-delay(10);
     lcd.setCursor(0,1);delay(10);
     lcd.print("Hum: ");
-delay(10);
     lcd.setCursor(7,1);
-    delay(10);
     lcd.print(dht.readHumidity());
-delay(10);
-    lcd.setCursor(0,2);
-delay(10);
-    lcd.print(strcat(index==0?cursor:n, "TEST"));
-delay(10);
+		lcd.setCursor(0,2);
+		if (index == 0) lcd.print("==>");
+    lcd.setCursor(4,2);
+    lcd.print("TEST");
     lcd.setCursor(0,3);
-delay(10);
-    lcd.print(strcat(index==1?cursor:n, "CONFIG"));
-delay(10);
+    if (index == 1) lcd.print("==>");
+    lcd.setCursor(4,3);
+    lcd.print("CONFIG");
 }
 
 void showTest(int index, bool enter)
@@ -193,7 +189,7 @@ void showTest(int index, bool enter)
     digitalWrite(HEATER, LOW);
     digitalWrite(FAN, LOW);
     menuFunction = &showMainMenu;
-    showMainMenu(index, enter);
+    showMainMenu(index, false);
 }
 
 void showTempMenu(int index, bool enter)
@@ -215,7 +211,7 @@ void showTempMenu(int index, bool enter)
           //menuFunction = &showTemp;
           break;
       }
-      (*menuFunction)(index, false);
+      (*menuFunction)(0, false);
       return;
     }
     
@@ -326,22 +322,28 @@ void showConfigMenu(int index, bool enter)
           menuFunction = &showMainMenu;
           break;
       }
-      (*menuFunction)(index, false);
+      (*menuFunction)(0, false);
       return;
     }
     
-    char cursor[] = "=>";
-    char n[] = "";
     lcd.clear();
     lcd.backlight(); 
     lcd.setCursor(0,0);
-    lcd.print(strcat(index==0?cursor:n, "Temp"));
+    if (index==0) lcd.print("==>");
+    lcd.setCursor(4,0);
+    lcd.print("Temp");
     lcd.setCursor(0,1);
-    lcd.print(strcat(index==1?cursor:n, "Hum"));
+    if (index==1) lcd.print("==>");
+    lcd.setCursor(4,1);
+    lcd.print("Hum");
     lcd.setCursor(0,2);
-    lcd.print(strcat(index==2?cursor:n, "Comida"));
+    if (index==2) lcd.print("==>");
+    lcd.setCursor(4,2);
+    lcd.print("Comida");
     lcd.setCursor(0,3);
-    lcd.print(strcat(index==3?cursor:n, "Back"));
+    if (index==3) lcd.print("==>");
+    lcd.setCursor(4,3);
+    lcd.print("Back");
 }
 
 void setup() {
@@ -350,6 +352,10 @@ void setup() {
   comedero.attach(12);
   digitalWrite(FEED, HIGH);
   comedero.write(95);
+
+  pinMode(5, INPUT_PULLUP); // up
+  pinMode(A2, INPUT_PULLUP); // DOWN
+  pinMode(4, INPUT_PULLUP); // enter
   
   pinMode(HEATER, OUTPUT);
   pinMode(FAN, OUTPUT);
@@ -383,7 +389,7 @@ void loop()
 {         
 
   // comedero
-  botonComedero = 0; //analogRead(feedInterval);
+  botonComedero = analogRead(feedInterval);
   if (millis() - lastComedero > feedInterval || botonComedero > 800)
   {
     lastComedero = millis();
@@ -421,67 +427,35 @@ void loop()
     digitalWrite(HEATER, LOW);
   }
 
-if (analogRead(A1) > 200 && analogRead(A1) < 300)
-  {
-	Serial.println("test");
-	delay(500);
-}
+	if (digitalRead(5) == LOW)
+	{
+		Serial.println("UP");
+		lastRefrescoPantalla = millis(); 
+		menuIndex = menuIndex<1?0:menuIndex-1;
+		(*menuFunction)(menuIndex, false);
+		delay(180);
+	}
 
+	if (digitalRead(A2) == LOW)
+	{
+		Serial.println("DOWN");
+		lastRefrescoPantalla = millis(); 
+		menuIndex = menuIndex>3?0:menuIndex+1;
+		(*menuFunction)(menuIndex, false);
+		delay(180);
+	}
+
+	if (digitalRead(4) == LOW)
+	{
+		Serial.println("ENTER");
+		lastRefrescoPantalla = millis(); 
+		(*menuFunction)(menuIndex, true);
+		delay(180);
+	}
  
-  /*if (millis() - lastRefrescoPantalla > refrescoPantalla)
+  if (millis() - lastRefrescoPantalla > refrescoPantalla)
   {
     lastRefrescoPantalla = millis();  
-    //lcd.noBacklight();
-    (*menuFunction)(menuIndex, false);
+    lcd.noBacklight();
   }
-  if (millis()-180 > KPA)
-  {
-    LBP=0;
-    botonera = analogRead(A1);
-  }
-      
-  if (botonera > 200 && botonera < 300)
-  {
-    BP=1;
-
-    if (BP != LBP)
-    {
-      LBP=BP;
-      KPA=millis();        
-      Serial.println("UP");
-      lastRefrescoPantalla = millis(); 
-      //menuIndex = menuIndex<1?0:menuIndex-1;
-      (*menuFunction)(menuIndex, false);
-    }
-  }
-      
-  if (botonera > 450 && botonera < 600)
-  {
-    BP=2;
-
-    if (BP != LBP)
-    {
-      LBP=BP;
-      KPA=millis();        
-      Serial.println("DOWN"); 
-      lastRefrescoPantalla = millis(); 
-      menuIndex = menuIndex>3?0:menuIndex+1;
-      (*menuFunction)(menuIndex, false);
-    }
-  }
-    
-  if (botonera > 700 && botonera < 900)
-  {
-    BP=3;
-
-    if (BP != LBP)
-    {
-      LBP=BP;
-      KPA=millis()+30;        
-      Serial.println("ENTER");
-      lastRefrescoPantalla = millis(); 
-      menuIndex = 0;
-      (*menuFunction)(menuIndex, true);
-    }
-  }*/
 }
