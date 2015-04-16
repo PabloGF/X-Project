@@ -414,7 +414,7 @@ void loop()
   {
     lastRefrescoPantalla = millis();  
     lcd.noBacklight();
-    (*menuFuction)(menuIndex, false);
+    //(*menuFuction)(menuIndex, false);
   }
   if (millis()-180 > KPA)
   {
@@ -431,6 +431,7 @@ void loop()
       LBP=BP;
       KPA=millis();        
       Serial.println("UP");
+      lastRefrescoPantalla = millis(); 
       menuIndex = menuIndex<1?0:menuIndex-1;
       (*menuFuction)(menuIndex, false);
     }
@@ -445,6 +446,7 @@ void loop()
       LBP=BP;
       KPA=millis();        
       Serial.println("DOWN"); 
+      lastRefrescoPantalla = millis(); 
       menuIndex = menuIndex>3?0:menuIndex+1;
       (*menuFuction)(menuIndex, false);
     }
@@ -459,6 +461,7 @@ void loop()
       LBP=BP;
       KPA=millis()+30;        
       Serial.println("ENTER");
+      lastRefrescoPantalla = millis(); 
       menuIndex = 0;
       (*menuFuction)(menuIndex, true);
     }
