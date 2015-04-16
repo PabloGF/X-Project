@@ -119,7 +119,7 @@ void communication () {
 }
 }
 
-int menuIndex = -1;
+int menuIndex = 0;
 void (*menuFuction)(int, bool);
 
 void showMainMenu(int index, bool enter)
@@ -133,7 +133,7 @@ void showMainMenu(int index, bool enter)
           menuFuction = &showTest; // aqui va la funcion del siguiente menu si pulsas en la opcion 0 de este menu
           break;
         case 1:
-          menuFuction = &showComfigMenu;
+          menuFuction = &showConfigMenu;
           break;
       }
       (*menuFuction)(index, false);
@@ -161,12 +161,13 @@ void showMainMenu(int index, bool enter)
 void showTest(int index, bool enter)
 {
     lcd.clear();
-    lcd.print("Efectuando pruebas!"));
+    lcd.backlight(); 
+    lcd.print("Efectuando pruebas!");
     digitalWrite(FLASH, HIGH);
     delay(500);
     digitalWrite(FLASH, LOW);
     digitalWrite(FAN, HIGH);
-    delay(500)
+    delay(500);
     digitalWrite(FLASH, HIGH);
     digitalWrite(HEATER, HIGH);
     delay(2000);
@@ -208,6 +209,7 @@ void showTempMenu(int index, bool enter)
     char cursor[] = "=>";
     char n[] = "";
     lcd.clear();
+    lcd.backlight(); 
     lcd.setCursor(0,0);
     lcd.print(strcat(index==0?cursor:n, "Max temp"));
     lcd.setCursor(0,1);
@@ -244,6 +246,7 @@ void showHumMenu(int index, bool enter)
     char cursor[] = "=>";
     char n[] = "";
     lcd.clear();
+    lcd.backlight(); 
     lcd.setCursor(0,0);
     lcd.print(strcat(index==0?cursor:n, "Max Hum"));
     lcd.setCursor(0,1);
@@ -280,6 +283,7 @@ void showComidaMenu(int index, bool enter)
     char cursor[] = "=>";
     char n[] = "";
     lcd.clear();
+    lcd.backlight(); 
     lcd.setCursor(0,0);
     lcd.print(strcat(index==0?cursor:n, "N de comidas/dia"));
     lcd.setCursor(0,1);
@@ -316,6 +320,7 @@ void showConfigMenu(int index, bool enter)
     char cursor[] = "=>";
     char n[] = "";
     lcd.clear();
+    lcd.backlight(); 
     lcd.setCursor(0,0);
     lcd.print(strcat(index==0?cursor:n, "Temp"));
     lcd.setCursor(0,1);
@@ -330,6 +335,8 @@ void setup() {
   Serial.begin(9600);  // Used to type in characters
   dht.begin();
   comedero.attach(12);
+  digitalWrite(HEATER, HIGH);
+  comedero.write(95);
   
   pinMode(FEEDBUTTON, INPUT);
   pinMode(botonera, INPUT);
@@ -406,6 +413,7 @@ void loop()
   if (millis() - lastRefrescoPantalla > refrescoPantalla)
   {
     lastRefrescoPantalla = millis();  
+    lcd.noBacklight();
     (*menuFuction)(menuIndex, false);
   }
   if (millis()-180 > KPA)
