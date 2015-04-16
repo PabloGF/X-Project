@@ -81,7 +81,7 @@ void feed(){
 }
 
 
-void communication () {
+void communication() {
   if (Serial.available()) { //Si está disponible
     char c = Serial.read(); //Guardamos la lectura en una variable char
     if (c == 'H') { //Si es una 'H', enciendo el LED
@@ -386,7 +386,8 @@ void setup() {
 /* Main loop */
 /*************/
 void loop()
-{         
+{
+	communication();
 
   // comedero
   botonComedero = analogRead(feedInterval);
@@ -424,7 +425,7 @@ void loop()
     digitalWrite(HEATER, HIGH);
   }
   if (dht.readTemperature() > maxTemp) {
-    digitalWrite(HEATER, LOW);
+    //digitalWrite(HEATER, LOW);
   }
 
 	if (digitalRead(5) == LOW)
