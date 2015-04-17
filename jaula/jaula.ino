@@ -19,6 +19,15 @@ int melody[] = {
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
 int noteDurations[] = {
    4, 2, 4, 2, 4, 8, 4, 8, 4, 8, 4, 8, 2, 4 };
+   
+   
+   
+   int testSound[] = {
+  NOTE_A7,0,NOTE_A7,0};
+
+
+int noteDurationsTest[] = {
+   4, 8, 2, 4 };
 //-----------------------------
 
 #define DHTTYPE DHT11
@@ -135,13 +144,12 @@ void showMainMenu(int index, bool enter)
       { 
         case 0:
           menuFunction = &showTest;
-          showTest(0, false);
           break;
         case 1:
           menuFunction = &showConfigMenu;
-          showConfigMenu(0,false);
           break;
       }
+      (*menuFunction)(0,false);
       return;
     }
     
@@ -172,19 +180,34 @@ void showTest(int index, bool enter)
     lcd.clear();
     lcd.backlight(); 
     lcd.print("Efectuando pruebas!");
+    delay(1200);
+    lcd.setCursor(0,1);
     digitalWrite(FLASH, HIGH);
-    delay(500);
+    lcd.print("Flashes");
+    delay(2500);
     digitalWrite(FLASH, LOW);
+    lcd.setCursor(0,2);
+    lcd.print("Ventilacion");
     digitalWrite(FAN, HIGH);
     delay(500);
     digitalWrite(FLASH, HIGH);
     digitalWrite(HEATER, HIGH);
-    delay(2000);
+    lcd.setCursor(0,3);
+    delay(8000);
     digitalWrite(FLASH, LOW);
+    lcd.print("Calefaccion");
     delay(10000);
     digitalWrite(FLASH, HIGH);
     delay(500);
     digitalWrite(FLASH, LOW);
+    
+    for (int thisNote = 0; thisNote < 4; thisNote++) {
+    int noteDurationTest = 1000/noteDurationsTest[thisNote];
+    tone(7, testSound[thisNote],noteDurationTest);
+    int pauseBetweenNotes = noteDurationTest * 1.30;
+    delay(pauseBetweenNotes);
+    noTone(7);
+  }
     delay(500);
     digitalWrite(HEATER, LOW);
     digitalWrite(FAN, LOW);
